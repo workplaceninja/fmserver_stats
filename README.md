@@ -6,6 +6,9 @@ FileMaker Server 17 removed the useful Statistics pane for server stats like Ela
 It actually works with Server 16 - 18, and might work with earlier versions (untested).
 
 
+![FileMaker Server Stats Image](/css/screenshot.png?raw=true "")
+
+
 # Installation
 1.  On the FileMaker Server, make sure that server logging is turned on.
       In 16 and below:
