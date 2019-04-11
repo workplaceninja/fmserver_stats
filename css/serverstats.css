@@ -13,15 +13,15 @@ body {
 	height: 24px;
 	line-height: 12px;
 	background-color: #FFCCCC;
-	opacity: 0;
 }
 
 .error {
 	animation: fadein 1s;
+	opacity: 1;
 }
 
 .noerror {
-	animation: fadeout 1s;
+	opacity: 0;
 }
 	
 
@@ -29,10 +29,5 @@ body {
 @keyframes fadein {
 	from { opacity: 0; }
 	to   { opacity: 1; }
-}
-
-@keyframes fadeout {
-	from { opacity: 1; }
-	to   { opacity: 0; }
 }
 
