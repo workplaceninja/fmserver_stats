@@ -1,0 +1,32 @@
+<html>
+<head>
+		
+	<script src="../thirdparty/amcharts/amcharts.js"></script>
+	<script src="../thirdparty/amcharts/serial.js"></script>
+	<script src="../thirdparty/amcharts/plugins/export/export.min.js"></script>
+	<script src="js/serverstats.js"></script>
+	
+	<link rel="stylesheet" href="../thirdparty/amcharts/plugins/export/export.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="css/serverstats.css" type="text/css" media="all" />
+
+</head>
+
+<body>
+	<div id="chartdiv"></div>
+	Refresh every: 
+	<select id="ref" name="ref" onchange="ref();">
+		<option value="99999999">disabled</option>
+		<option value="5">5 sec</option>
+		<option value="10">10 sec</option>
+		<option value="15">15 sec</option>
+		<option value="30" selected="selected">30 sec</option>
+		<option value="60">1 min</option>
+		<option value="120">2 min</option>
+		<option value="300">5 min</option>
+		<option value="900">15 min</option>
+		<option value="3600">1 hour</option>
+	</select>
+	<div id="errlog" class=""></div>
+</body>
+
+</html>

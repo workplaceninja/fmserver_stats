@@ -1,0 +1,38 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	font-size:11px;
+}
+
+#chartdiv {
+	width: 100%;
+	height: 600px;
+}
+
+#errlog {
+	width: 100%;
+	height: 24px;
+	line-height: 12px;
+	background-color: #FFCCCC;
+	opacity: 0;
+}
+
+.error {
+	animation: fadein 1s;
+}
+
+.noerror {
+	animation: fadeout 1s;
+}
+	
+
+
+@keyframes fadein {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+@keyframes fadeout {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
