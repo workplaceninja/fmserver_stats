@@ -2,11 +2,15 @@ var url = '';
 // You must copy php/serverstats/stats.php over to the FileMaker Server at "FileMaker Server/HTTPServer/conf/
 // and then set the url accordingly.
 
-//url = 'http://fmserverlocation/serverstats/stats.php';
+//url = 'http://fmserver_path/serverstats/stats.php';
+
+
+
 
 if ( url === '' ) {
 	window.alert('You must set the url in the serverstats.js file.');
 } else {
+	var default_snapshots = 240;
 	var chartData = [];
 	var chart, graphs;
 	getStats(1);
@@ -221,12 +225,13 @@ function createChart () {
 			"scrollbarHeight": 40
 		},
 		"chartCursor": {
-		   "limitToGraph":"c14"
+		   "limitToGraph": "c14",
+		   "categoryBalloonDateFormat": "MMM D, YYYY JJ:NN:SS"
 		},
 		"categoryField": "date",
 		"categoryAxis": {
 			"parseDates": true,
-			"minPeriod": "15ss",
+			"minPeriod": "5ss",
 			"axisColor": "#DADADA",
 			"dashLength": 1,
 			"minorGridEnabled": true
@@ -242,6 +247,6 @@ function createChart () {
 
 
 function zoomChart() {
-    chart.zoomToIndexes(chartData.length - 240, chartData.length - 1);
+    chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
 
