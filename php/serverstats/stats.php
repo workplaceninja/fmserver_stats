@@ -1,6 +1,10 @@
 <?php
 	header('Access-Control-Allow-Origin: *');
 	
+	$number_of_lines = 5000;
+	
+	
+	
 	if ( function_exists ('getParam') === FALSE ) {
 		function getParam($p) {
 			return (isset($_REQUEST[$p]) ? $_REQUEST[$p] : '');
@@ -10,6 +14,8 @@
 	
 	function GetFileMakerLog($type)
 	{
+		global $number_of_lines;
+		
 		$logPaths = array();
 	
 		// Location of your logs directory. If it's different for your server, change it here.
@@ -39,7 +45,7 @@
 			$logPath = array_key_exists($logType, $logPaths) ? $logPaths[$logType] : '';
 	
 			if ($logPath != '') {
-				echo ReadFromEndByLine($logPath, 5000);
+				echo ReadFromEndByLine($logPath, $number_of_lines);
 				exit;
 			}
 			else {
