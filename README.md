@@ -35,3 +35,17 @@ That should be it.  Load up http://path_to_serverstats/ and you should see your 
 
 # Warning
 This is untested on an OS X server, so there might be a few things to tweak to get it working.
+
+
+# Features
+1.  Ability to expand the time range to a couple days.
+
+The default view shows you the last 240 snapshots (2 hours with 30 second intervals), but you can move the top scroller to show the last 5000 snapshots.  If you want to go back even further, you can edit the stats.php file variable $number_of_lines.  (Doing so will slow down the call.)
+
+2.  Easily toggle on and off the data points you want to see.
+
+3.  Set the refresh rate at the bottom.
+
+If you want to see less than 30 seconds, you must set FileMaker Server to collect more snapshots.
+
+
