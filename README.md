@@ -1,12 +1,16 @@
 # fmserver_stats
-PHP replacement for the missing FileMaker 17+ server statistics
+Web replacement for the missing FileMaker 17+ server statistics
 
 FileMaker Server 17 removed the useful Statistics pane for server stats like Elapsed Time, Cache Hit %, etc.  This brings it back, and in a more improved way.
 
-It actually works with Server 16 - 18, and might work with earlier versions (untested).
+It also allows you to graph client statistics on a timeline.  You choose the plot point, and it'll show you by default the top 20 clients in that category.
+
+It works with Server 16 - 18, and might work with earlier versions (untested).
 
 
-![FileMaker Server Stats Image](/css/screenshot.png?raw=true "")
+![FileMaker Server Stats Image](/css/screenshot_server.png?raw=true "")
+
+![FileMaker Client Stats Image](/css/screenshot_client.png?raw=true "")
 
 
 # Installation
@@ -14,14 +18,15 @@ It actually works with Server 16 - 18, and might work with earlier versions (unt
 
       In 16 and below:
       
-        * Go to the Admin Console, go to Database Server, then make sure Usage Statistics is checked.
-        
-        * In the same panel, set the Collection Interval to whatever you desire (30 sec default).
+        * Go to the Admin Console, then Database Server      
+        * Enable Usage Statistics and Client Statistics (if desired)
+        * Set the Collection Interval to whatever you desire (30 sec default)
         
       In 17+:
       
-        * Open a command line and enter the following:
+        * Open a command line and enter the following (as desired):
           fmsadmin enable serverstats
+          fmsadmin enable clientstats
           fmsadmin set serverconfig statsinterval=30
           
 2.  Copy the file php/serverstats/stats.php over to the FileMaker Server.
@@ -48,14 +53,18 @@ This is untested on an OS X server, so there might be a few things to tweak to g
 
 
 # Features
-1.  Ability to expand the time range to a couple days.
+1.  Ability to expand the time range of the stats.
 
-The default view shows you the last 240 snapshots (2 hours with 30 second intervals), but you can move the top scroller to show the last 5000 snapshots.  If you want to go back even further, you can edit the stats.php file variable $number_of_lines.  (Doing so will slow down the call.)
+The default view shows you the last 240 snapshots (2 hours with 30 second intervals), but you can move the top scroller to show the last 2,880 snapshots.  If you want to go back even further, you can edit the snapshots variable in serverstats.js.  (Doing so will slow down the calls to FM Server.)
+
+(For the client stats, you will get 10x the number of snapshots.  This is because there are multiple lines per date.)
 
 2.  Easily toggle on and off the data points you want to see.
 
-3.  Set the refresh rate at the bottom.
+3.  Set the refresh rate at the top.
 
-If you want to see less than 30 seconds, you must set FileMaker Server to collect more snapshots.
+4.  Plot client statistics on a graph.
+
+If you want to see less than 30 seconds, you must change these settings in FileMaker Server to collect more snapshots.
 
 
