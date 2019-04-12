@@ -1,9 +1,6 @@
 <?php
 	header('Access-Control-Allow-Origin: *');
 	
-	$number_of_lines = 5000;
-	
-	
 	
 	if ( function_exists ('getParam') === FALSE ) {
 		function getParam($p) {
@@ -12,10 +9,18 @@
 	}
 	
 	
-	function GetFileMakerLog($type)
-	{
-		global $number_of_lines;
-		
+	$type = getParam('type');
+	$lines = getParam('lines');
+	
+	if ( $lines === '' ) {
+		$lines = 5000;
+	} else {
+		$lines = intval($lines);
+	}
+	
+	
+	function GetFileMakerLog($type, $lines)
+	{		
 		$logPaths = array();
 	
 		// Location of your logs directory. If it's different for your server, change it here.
@@ -35,17 +40,18 @@
 								'event'        => $logBase .'Event.log',
 								'stderr'       => $logBase .'stderr',
 								'stdout'       => $logBase .'stdout',
-								'topcallstats' => $logBase .'TopCallStats.log',
 								'wpedebug'     => $logBase .'wpe_debug.log',
 								'wpe'          => $logBase .'wpe.log',
-								'server'       => $logBase .'Stats.log'
+								'topcall'      => $logBase .'TopCallStats.log',
+								'server'       => $logBase .'Stats.log',
+								'client'       => $logBase .'ClientStats.log'
 							);
 	
 			$logType = strtolower($type);
 			$logPath = array_key_exists($logType, $logPaths) ? $logPaths[$logType] : '';
 	
 			if ($logPath != '') {
-				echo ReadFromEndByLine($logPath, $number_of_lines);
+				echo ReadFromEndByLine($logPath, $lines);
 				exit;
 			}
 			else {
@@ -58,8 +64,7 @@
 	}
 	
 	
-	$type = getParam('type');
-	GetFileMakerLog($type);
+	GetFileMakerLog($type, $lines);
 	
 	
 	function ReadFromEndByLine($filepath, $lines = 1, $adaptive = true) {
