@@ -49,8 +49,10 @@ That should be it.  Load up http://path_to_serverstats/ and you should see your 
 
 
 
-# Warning
+# Warnings
 This is untested on an OS X server, so there might be a few things to tweak to get it working.
+
+For client statistics, you have to re-enable them in FileMaker Server each time the server is restarted.  You could set up a Task Schedule to enable via command line every so often to have it automatically start up.  Server statistics will stay enabled.
 
 
 
@@ -67,6 +69,6 @@ The default view shows you the last 240 snapshots (2 hours with 30 second interv
 
 4.  Plot client statistics on a graph.
 
-If you want to see less than 30 seconds, you must change these settings in FileMaker Server to collect more snapshots.
+If you want to see snapshots more frequently than every seconds, you must change these settings in FileMaker Server to collect more snapshots.
 
 
