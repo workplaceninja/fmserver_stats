@@ -8,7 +8,6 @@ var url = '';
 
 //url = 'http://fmserver_path/serverstats/stats.php';
 
-
 /* END CONFIGURATION */
 
 
@@ -19,6 +18,7 @@ var topx = 20;
 var refinput = 30;
 
 
+// The names of the columns in the chart
 var headerArr = [
 					[	
 						'Timestamp', 'Network KB/sec In', 'Network KB/sec Out', 'Disk KB/sec Read', 'Disk KB/sec Written', 'Cache Hit %', 
@@ -31,7 +31,8 @@ var headerArr = [
 						'Wait Time', 'I/O Time', 'Client name'
 					]
 				];
-				
+
+// Not important - just internal variable names
 var valueArr = [
 					[		
 						'date', 'netin', 'netout', 'diskread', 'diskwrite', 'cachehit', 
@@ -44,7 +45,8 @@ var valueArr = [
 						'wait', 'io', 'name'
 					]
 				];
-				
+
+// Define the color of the lines on the chart
 var colorArr = [
 					[
 						'#901b52', '#1c72f5', '#eb47f9', '#1f189f', '#0977bf', '#8e713c', 
@@ -58,7 +60,8 @@ var colorArr = [
 					]
 					
 				];
-				
+
+// This defines which Y axis to use.  (Charts that display in microseconds will not work well with others.)
 var pointArr = [
 					[
 						0, 1, 1, 1, 1, 2, 
@@ -72,7 +75,8 @@ var pointArr = [
 					]
 
 				];
-				
+
+// Set which stats are hidden by default
 var hiddenArr = [
 					[
 						true, true, true, true, true, true, 
@@ -80,9 +84,9 @@ var hiddenArr = [
 						false, false, false, false, true, true
 					],
 					[
-						true, true, true,
-						true, false, false,
-						false, true, true
+						false, false, false,
+						false, false, false,
+						false, false, false
 					]
 				];
 
@@ -444,7 +448,7 @@ function createChart () {
 		   "limitToGraph": "c14",
 		   "categoryBalloonDateFormat": "MMM D, YYYY JJ:NN:SS"
 		},
-		"categoryField": "date",
+		"categoryField": valueArr[chartnum][0],
 		"categoryAxis": {
 			"parseDates": true,
 			"minPeriod": "5ss",
@@ -465,4 +469,3 @@ function createChart () {
 function zoomChart() {
     chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
-
