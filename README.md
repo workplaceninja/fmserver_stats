@@ -8,9 +8,9 @@ It also allows you to graph client statistics on a timeline.  You choose the plo
 It works with Server 16 - 18, and might work with earlier versions (untested).
 
 
-![FileMaker Server Stats Image](/css/screenshot_server.png?raw=true "")
+![FileMaker Server Stats Image](/css/screenshot_server_2.png?raw=true "")
 
-![FileMaker Client Stats Image](/css/screenshot_client.png?raw=true "")
+![FileMaker Client Stats Image](/css/screenshot_client_2.png?raw=true "")
 
 
 # Installation
