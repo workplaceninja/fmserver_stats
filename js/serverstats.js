@@ -16,6 +16,7 @@ var chartArr = ['server', 'client'];
 var chosencolumn = 5;
 var topx = 20;
 var refinput = 30;
+var logarithmic = false;
 
 
 // The names of the columns in the chart
@@ -181,6 +182,14 @@ function topxtoggle () {
 }
 
 
+function logarithmictoggle () {
+	var val = document.getElementById('logarithmic').checked;
+	logarithmic = val;
+	chartData = amReformat(csv);
+	createChart();
+}
+
+
 function refreshChart () {
 	getStats(0);
 }
@@ -236,6 +245,7 @@ function errlog (str) {
 
 function amReformat (csv) {
 	var cArr = [];
+	var retArr = [];
 	var csvlines = csv.split("\n");
 	var obj = {};
 	nameobj = {};
@@ -247,7 +257,8 @@ function amReformat (csv) {
 	
 	var n, val, y, ycount = headerArr[chartnum].length;
 	var x = 1, xcount = csvlines.length;
-	var d, lastd = new Date('1/1/1900');
+	var d, lastd = new Date(csvlines[0].split("\t")[0]);
+	var valmin = (logarithmic === true ? 1 : 0);
 	
 	while (x < xcount) {
 		csvcolumns = csvlines[x].split("\t");
@@ -258,17 +269,14 @@ function amReformat (csv) {
 		if ( chartnum === 0 ) {
 			y = 1;
 			while ( y < ycount ) {
-				obj[valueArr[chartnum][y]] = +csvcolumns[y];
+				obj[valueArr[chartnum][y]] = Math.max(0, +csvcolumns[y]);
 				y += 1;
 			}
 		} else {
 			n = btoa(csvcolumns[ycount - 1]);
 			val = +csvcolumns[chosencolumn];
-			
-			if ( val >= 0 ) {
-				nameobj[n] = (nameobj[n] || 0) + val;
-				obj[n] = val;
-			}
+			nameobj[n] = (nameobj[n] || 0) + val;
+			obj[n] = Math.max(0, val);
 		}
 		
 		if ( chartnum === 0 || (d.getTime() !== lastd.getTime() && d.getTime() > todaym10 ) ) {
@@ -280,9 +288,15 @@ function amReformat (csv) {
 		x += 1;
 	}
 	
-	if ( chartnum === 1 && valueArr[chartnum][0] !== undefined ) {
+	if ( chartnum === 1 && typeof(obj[valueArr[chartnum][0]]) !== 'undefined' ) {
 		cArr.push(obj);
 	}
+	
+	if ( cArr[cArr.length - 1][valueArr[chartnum][0]].getTime() === cArr[cArr.length - 2][valueArr[chartnum][0]].getTime() ) {
+		// Remove duplicate date at end
+		cArr.pop();
+	}
+	
 	
 	
 	graphs = [];
@@ -313,6 +327,8 @@ function amReformat (csv) {
 		
 		valueaxes = [
 			{
+				"logarithmic": logarithmic,
+				"treatZeroAs": valmin,
 				"id": "g1",
 				"axisAlpha": 0.2,
 				"dashLength": 1,
@@ -320,6 +336,8 @@ function amReformat (csv) {
 				"offset": 130,
 				"gridThickness": 0
 			}, {
+				"logarithmic": logarithmic,
+				"treatZeroAs": valmin,
 				"id": "g2",
 				"axisAlpha": 0.2,
 				"dashLength": 1,
@@ -327,6 +345,8 @@ function amReformat (csv) {
 				"offset": 70,
 				"gridThickness": 0
 			}, {
+				"logarithmic": logarithmic,
+				"treatZeroAs": valmin,
 				"id": "g3",
 				"axisAlpha": 0.2,
 				"dashLength": 1,
@@ -334,6 +354,8 @@ function amReformat (csv) {
 				"offset": 70,
 				"gridThickness": 0
 			}, {
+				"logarithmic": logarithmic,
+				"treatZeroAs": valmin,
 				"id": "g4",
 				"axisAlpha": 0.2,
 				"dashLength": 1,
@@ -341,6 +363,8 @@ function amReformat (csv) {
 				"offset": 0,
 				"gridThickness": 0
 			}, {
+				"logarithmic": logarithmic,
+				"treatZeroAs": valmin,
 				"id": "g5",
 				"axisAlpha": 0.2,
 				"dashLength": 1,
@@ -349,6 +373,8 @@ function amReformat (csv) {
 				"gridThickness": 0
 			}
 		];
+		
+		retArr = cArr;
 	} else {
 	
 
@@ -360,6 +386,22 @@ function amReformat (csv) {
 		sortable.sort(function(a, b) {
 		    return b[1] - a[1];
 		});
+		
+		
+		// Populate data for clients that have no log for a date
+		xcount = cArr.length;
+		ycount = Math.min(topx, sortable.length);
+		x = 0;
+		while ( x < xcount ) {
+			retArr.push({});
+			retArr[x][valueArr[chartnum][0]] = cArr[x][valueArr[chartnum][0]];
+			y = 0;
+			while ( y < ycount ) {
+				retArr[x][sortable[y][0]] = (typeof(cArr[x][sortable[y][0]]) === "undefined" ? valmin : cArr[x][sortable[y][0]]);
+				y += 1;
+			}
+			x += 1;
+		}
 
 
 		x = 0;
@@ -383,6 +425,8 @@ function amReformat (csv) {
 		
 		valueaxes = [
 			{
+				"logarithmic": logarithmic,
+				"treatZeroAs": valmin,
 				"id": "g1",
 				"stackType": "regular",
 				"axisAlpha": 0.2,
@@ -391,7 +435,7 @@ function amReformat (csv) {
 			}
 		];
 	}
-	return cArr;
+	return retArr;
 }
 
 
@@ -424,7 +468,7 @@ function createChart () {
 	
 	chart = AmCharts.makeChart("chartdiv", {
 	    "type": "serial",
-	    "theme": "none",
+	    "theme": "light",
 	    "marginRight": 80,
 		"autoMarginOffset": 20,
 		"marginTop": 7,
