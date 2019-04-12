@@ -48,8 +48,10 @@ It works with Server 16 - 18, and might work with earlier versions (untested).
 That should be it.  Load up http://path_to_serverstats/ and you should see your FileMaker Server's statistics.
 
 
+
 # Warning
 This is untested on an OS X server, so there might be a few things to tweak to get it working.
+
 
 
 # Features
