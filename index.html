@@ -31,24 +31,31 @@
 	
 	&nbsp; &nbsp; &nbsp; &nbsp;
 	
+	<div id="log" class="chooser">
+		Log Scale:
+		<input id="logarithmic" name="logarithmic" type="checkbox" onchange="logarithmictoggle();" />
+	</div>
+	
+	&nbsp; &nbsp; &nbsp; &nbsp;
+	
 	<div id="statstype" class="chooser">
-	Stats Type:
-	<select id="chartnum" name="chartnum" onchange="chartnumtoggle();">
-		<option value="0" selected="selected">Server</option>
-		<option value="1">Clients</option>
-	</select>
+		Stats Type:
+		<select id="chartnum" name="chartnum" onchange="chartnumtoggle();">
+			<option value="0" selected="selected">Server</option>
+			<option value="1">Clients</option>
+		</select>
 	</div>
 	
 	&nbsp; &nbsp; &nbsp; &nbsp;
 	
 	<div id="plotpoint" class="chooser hide">
-	Plot on: 
-	<select id="plotpoints" name="plotpoints" onchange="plottoggle();"></select>
-	
-	&nbsp; &nbsp; &nbsp; &nbsp;
-	
-	Show top:
-	<input id="topx" name="topx" onchange="topxtoggle();" type="number" value="20" />
+		Plot on: 
+		<select id="plotpoints" name="plotpoints" onchange="plottoggle();"></select>
+		
+		&nbsp; &nbsp; &nbsp; &nbsp;
+		
+		Show top:
+		<input id="topx" name="topx" onchange="topxtoggle();" type="number" value="20" />
 	</div>
 	
 	
