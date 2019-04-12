@@ -13,9 +13,9 @@
 </head>
 
 <body>
-	<div id="chartdiv"></div>
+	<div id="refresh" class="chooser">
 	Refresh every: 
-	<select id="ref" name="ref" onchange="ref();">
+	<select id="ref" name="ref" onchange="reftoggle();">
 		<option value="5">5 sec</option>
 		<option value="10">10 sec</option>
 		<option value="15">15 sec</option>
@@ -27,7 +27,36 @@
 		<option value="3600">1 hour</option>
 		<option value="99999999">disabled</option>
 	</select>
-	<div id="errlog" class="noerror"></div>
+	</div>
+	
+	&nbsp; &nbsp; &nbsp; &nbsp;
+	
+	<div id="statstype" class="chooser">
+	Stats Type:
+	<select id="chartnum" name="chartnum" onchange="chartnumtoggle();">
+		<option value="0" selected="selected">Server</option>
+		<option value="1">Clients</option>
+	</select>
+	</div>
+	
+	&nbsp; &nbsp; &nbsp; &nbsp;
+	
+	<div id="plotpoint" class="chooser hide">
+	Plot on: 
+	<select id="plotpoints" name="plotpoints" onchange="plottoggle();"></select>
+	
+	&nbsp; &nbsp; &nbsp; &nbsp;
+	
+	Show top:
+	<input id="topx" name="topx" onchange="topxtoggle();" type="number" value="20" />
+	</div>
+	
+	
+	<div id="errlogdiv"><div id="errlog" class="noerror"></div></div>
+	
+	
+	<div id="chartdiv"></div>
+	
 </body>
 
 </html>
