@@ -69,6 +69,8 @@ The default view shows you the last 240 snapshots (2 hours with 30 second interv
 
 4.  Plot client statistics on a graph.
 
+5.  Enable Log Scale, making the Y axis logarithmic (10, 100, 1000, 10000, etc)
+
 If you want to see snapshots more frequently than every seconds, you must change these settings in FileMaker Server to collect more snapshots.
 
 
