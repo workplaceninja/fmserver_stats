@@ -1,9 +1,9 @@
-# fmserver_stats v1.1
+# fmserver_stats v1.2
 Web replacement for the missing FileMaker 17+ server statistics
 
 FileMaker Server 17 removed the useful Statistics pane for server stats like Elapsed Time, Cache Hit %, etc.  This brings it back, and in a more improved way.
 
-It also allows you to graph client statistics on a timeline.  You choose the plot point, and it'll show you by default the top 20 clients in that category.
+It also allows you to graph client and top call statistics on a timeline.  You choose the plot point, and it'll show you by default the top 20 clients in that category.
 
 It works with Server 16 - 18, and might work with earlier versions (untested).
 
@@ -12,6 +12,8 @@ It works with Server 16 - 18, and might work with earlier versions (untested).
 
 ![FileMaker Client Stats Image](/css/screenshot_client_2.png?raw=true "")
 
+![FileMaker Top Call Stats Image](/css/screenshot_topcalls_2.png?raw=true "")
+
 
 # Installation
 1. On the FileMaker Server, make sure that server logging is turned on.
@@ -19,7 +21,7 @@ It works with Server 16 - 18, and might work with earlier versions (untested).
       In 16 and below:
       
         * Go to the Admin Console, then Database Server      
-        * Enable Usage Statistics and Client Statistics (if desired)
+        * Enable Usage Statistics, Client Statistics, and Top Call Statistics (if desired)
         * Set the Collection Interval to whatever you desire (30 sec default)
         
       In 17+:
@@ -27,6 +29,7 @@ It works with Server 16 - 18, and might work with earlier versions (untested).
         * Open a command line and enter the following (as desired):
           fmsadmin enable serverstats
           fmsadmin enable clientstats
+          fmsadmin enable topcallstats
           fmsadmin set serverconfig statsinterval=30
           
 2.  Copy the file php/serverstats/stats.php over to the FileMaker Server.
@@ -52,7 +55,7 @@ That should be it.  Load up http://path_to_serverstats/ and you should see your 
 # Warnings
 This is untested on an OS X server, so there might be a few things to tweak to get it working.
 
-For client statistics, you have to re-enable them in FileMaker Server each time the server is restarted.  You could set up a Task Schedule to enable via command line every so often to have it automatically start up.  Server statistics will stay enabled.
+For client or top call statistics, you have to re-enable them in FileMaker Server each time the server is restarted.  You could set up a Task Schedule to enable via command line every so often to have it automatically start up.  (Server statistics will stay enabled.)
 
 
 
@@ -67,9 +70,11 @@ The default view shows you the last 240 snapshots (2 hours with 30 second interv
 
 3.  Set the refresh rate at the top.
 
-4.  Plot client statistics on a graph.
+4.  Plot client statistics on a graph.  (Choose from several plot points.)
 
-5.  Enable Log Scale, making the Y axis logarithmic (10, 100, 1000, 10000, etc)
+5.  Plot top call statistics on a graph.  (Choose from several plot points and groupings.)
+
+6.  Enable Log Scale, making the Y axis logarithmic (10, 100, 1000, 10000, etc)
 
 If you want to see snapshots more frequently than every seconds, you must change these settings in FileMaker Server to collect more snapshots.
 
