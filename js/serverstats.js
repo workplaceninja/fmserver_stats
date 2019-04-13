@@ -12,6 +12,12 @@ var url = '';
 
 
 
+/* FMSERVER_STATS v1.3.1
+** written by Christopher Bishop @ FuseFX, Inc.
+*/
+
+
+
 var chartArr = ['server', 'client', 'topcall'];
 var chosencolumnArr = [14, 5, 8];
 var defaultlinesArr = [1, 10, 10];
