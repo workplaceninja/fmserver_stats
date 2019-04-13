@@ -12,8 +12,10 @@ var url = '';
 
 
 
-var chartArr = ['server', 'client'];
-var chosencolumn = 5;
+var chartArr = ['server', 'client', 'topcall'];
+var chosencolumnArr = [14, 5, 8];
+var defaultlinesArr = [1, 10, 10];
+var groupArr = [0, 8, 11];
 var topx = 20;
 var refinput = 30;
 var logarithmic = false;
@@ -30,6 +32,11 @@ var headerArr = [
 						'Timestamp', 'Network Bytes In', 'Network Bytes Out', 
 						'Remote Calls', 'Remote Calls In Progress', 'Elapsed Time', 
 						'Wait Time', 'I/O Time', 'Client name'
+					],
+					[
+						'Timestamp', 'Start Time', 'End Time', 'Total Elapsed',
+						'Operation', 'Target', 'Network Bytes In', 'Network Bytes Out',
+						'Elapsed Time', 'Wait Time', 'I/O Time', 'Client name'
 					]
 				];
 
@@ -44,6 +51,11 @@ var valueArr = [
 						'date', 'netin', 'netout',
 						'calls', 'callsinprog', 'elapsed', 
 						'wait', 'io', 'name'
+					],
+					[		
+						'date', 'start', 'end', 'totalelapsed',
+						'operation', 'target', 'netin', 'netout',
+						'elapsed', 'wait', 'io', 'name'
 					]
 				];
 
@@ -58,8 +70,31 @@ var colorArr = [
 						'#901b52', '#1c72f5', '#eb47f9', 
 						'#0f2b1f', '#8abdcc', '#a301d5', 
 						'#f83169', '#4b996f', '#34df9d'
+					],
+					[
+						'#901b52', '#1c72f5', '#eb47f9', '#1f189f',
+						'#0f2b1f', '#8abdcc', '#a301d5', '#a099da',
+						'#f83169', '#4b996f', '#34df9d', '#6b039a',
 					]
 					
+				];
+				
+var groupByArr = [
+					[
+						false, false, false, false, false, false,
+						false, false, false, false, false, false,
+						false, false, false, false, false, false
+					],
+					[
+						false, false, false,
+						false, false, false,
+						false, false, true
+					],
+					[
+						false, false, false, false,
+						true, true, false, false,
+						false, false, false, true
+					]
 				];
 
 // This defines which Y axis to use.  (Charts that display in microseconds will not work well with others.)
@@ -72,7 +107,12 @@ var pointArr = [
 					[
 						0, 1, 1,
 						4, 4, 5,
-						5, 5, 1
+						5, 5, 0
+					],
+					[
+						0, 0, 0, 5,
+						0, 0, 1, 1,
+						5, 5, 5, 0
 					]
 
 				];
@@ -85,9 +125,33 @@ var hiddenArr = [
 						false, false, false, false, true, true
 					],
 					[
+						true, false, false,
 						false, false, false,
+						false, false, true
+					],
+					[
+						true, true, true, false,
+						true, true, false, false,
+						false, false, false, true
+					]
+				];
+
+// Set which stats are disabled (due to unplottable data)
+var disabledArr = [
+					[
+						true, false, false, false, false, false, 
+						false, false, false, false, false, false, 
+						false, false, false, false, false, false
+					],
+					[
+						true, false, false,
 						false, false, false,
-						false, false, false
+						false, false, true
+					],
+					[
+						true, true, true, false,
+						true, true, false, false,
+						false, false, false, true
 					]
 				];
 
@@ -108,7 +172,7 @@ if ( chartnum === '' ) {
 	chartnum = 0;
 } else {
 	chartnum = +chartnum;
-	setTimeout(function() { document.getElementById('chartnum').value = chartnum; showPlotPoints (chartnum) }, 50);
+	setTimeout(function() { document.getElementById('chartnum').value = chartnum; showPlotPoints(chartnum) }, 50);
 }
 
 
@@ -139,33 +203,25 @@ function chartnumtoggle () {
 		chartnum = val;
 		getStats(1);
 		showPlotPoints(val);
+		showGroupBy(val);
 	}
-}
-
-
-function showPlotPoints (val) {
-	if ( val === 1 ) {
-		buildPlotPoints();
-	}
-	document.getElementById('plotpoint').className = (val === 0 ? 'chooser hide' : 'chooser show');
-}
-
-
-function buildPlotPoints () {
-	var str = '';
-	var x = 1, xcount = headerArr[chartnum].length - 1;
-	while ( x < xcount ) {
-		str += '<option value="' + x + '"' + (chosencolumn === x ? ' selected="selected"' : '') + '>' + headerArr[chartnum][x] + '</option>';
-		x += 1;
-	}
-	document.getElementById('plotpoints').innerHTML = str;
 }
 
 
 function plottoggle () {
 	var val = +document.getElementById('plotpoints').value;
-	if ( chosencolumn !== val ) {
-		chosencolumn = val;
+	if ( chosencolumnArr[chartnum] !== val ) {
+		chosencolumnArr[chartnum] = val;
+		chartData = amReformat(csv);
+		createChart();
+	}
+}
+
+
+function groupbytoggle () {
+	var val = +document.getElementById('groupby').value;
+	if ( groupArr[chartnum] !== val ) {
+		groupArr[chartnum] = val;
 		chartData = amReformat(csv);
 		createChart();
 	}
@@ -187,6 +243,48 @@ function logarithmictoggle () {
 	logarithmic = val;
 	chartData = amReformat(csv);
 	createChart();
+}
+
+
+function showPlotPoints (val) {
+	if ( val > 0 ) {
+		buildPlotPoints();
+	}
+	document.getElementById('plotpoint').className = (val === 0 ? 'chooser hide' : 'chooser show');
+}
+
+
+function buildPlotPoints () {
+	var str = '';
+	var x = 0, xcount = headerArr[chartnum].length;
+	while ( x < xcount ) {
+		if ( disabledArr[chartnum][x] === false ) {
+			str += '<option value="' + x + '"' + (chosencolumnArr[chartnum] === x ? ' selected="selected"' : '') + '>' + headerArr[chartnum][x] + '</option>';
+		}
+		x += 1;
+	}
+	document.getElementById('plotpoints').innerHTML = str;
+}
+
+
+function showGroupBy (val) {
+	if ( val > 0 ) {
+		buildGroupBy();
+	}
+	document.getElementById('groupbydiv').className = (val < 2 ? 'chooser hide' : 'chooser show');
+}
+
+
+function buildGroupBy () {
+	var str = '';
+	var x = 0, xcount = headerArr[chartnum].length;
+	while ( x < xcount ) {
+		if ( groupByArr[chartnum][x] === true ) {
+			str += '<option value="' + x + '"' + (groupArr[chartnum] === x ? ' selected="selected"' : '') + '>' + headerArr[chartnum][x] + '</option>';
+		}
+		x += 1;
+	}
+	document.getElementById('groupby').innerHTML = str;
 }
 
 
@@ -224,7 +322,7 @@ function getStats (fullrefresh) {
 		}
 	};
 	
-	var thisurl = url + '?type=' + chartArr[chartnum] + '&lines=' + snapshots * (chartnum === 1 ? 10 : 1) + '&rnd=' + Math.random();
+	var thisurl = url + '?type=' + chartArr[chartnum] + '&lines=' + snapshots * defaultlinesArr[chartnum] + '&rnd=' + Math.random();
 	
 	xmlhttp.open("GET", thisurl, true);
 	xmlhttp.timeout = 30000;
@@ -273,8 +371,8 @@ function amReformat (csv) {
 				y += 1;
 			}
 		} else {
-			n = btoa(csvcolumns[ycount - 1]);
-			val = +csvcolumns[chosencolumn];
+			n = btoa(csvcolumns[groupArr[chartnum]]);
+			val = +csvcolumns[chosencolumnArr[chartnum]];
 			nameobj[n] = (nameobj[n] || 0) + val;
 			obj[n] = Math.max(0, val);
 		}
@@ -288,13 +386,15 @@ function amReformat (csv) {
 		x += 1;
 	}
 	
-	if ( chartnum === 1 && typeof(obj[valueArr[chartnum][0]]) !== 'undefined' ) {
+	if ( chartnum > 0 && typeof(obj[valueArr[chartnum][0]]) !== 'undefined' ) {
 		cArr.push(obj);
 	}
 	
-	if ( cArr[cArr.length - 1][valueArr[chartnum][0]].getTime() === cArr[cArr.length - 2][valueArr[chartnum][0]].getTime() ) {
-		// Remove duplicate date at end
-		cArr.pop();
+	if ( cArr.length > 1 ) {
+		if ( cArr[cArr.length - 1][valueArr[chartnum][0]].getTime() === cArr[cArr.length - 2][valueArr[chartnum][0]].getTime() ) {
+			// Remove duplicate date at end
+			cArr.pop();
+		}
 	}
 	
 	
@@ -405,7 +505,8 @@ function amReformat (csv) {
 
 
 		x = 0;
-		while ( x < topx ) {
+		xcount = sortable.length;
+		while ( x < topx && x < xcount ) {
 			property = sortable[x][0];
 			graphs.push(
 				{
@@ -513,3 +614,4 @@ function createChart () {
 function zoomChart() {
     chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
+
