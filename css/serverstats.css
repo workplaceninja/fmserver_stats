@@ -50,7 +50,10 @@ input#topx {
 .noerror {
 	opacity: 0;
 }
-	
+
+.amChartsLegend.amcharts-legend-div {
+	max-height:200px;
+}	
 
 
 @keyframes fadein {
