@@ -43,19 +43,27 @@
 		<select id="chartnum" name="chartnum" onchange="chartnumtoggle();">
 			<option value="0" selected="selected">Server</option>
 			<option value="1">Clients</option>
+			<option value="2">Top Calls</option>
 		</select>
 	</div>
 	
 	&nbsp; &nbsp; &nbsp; &nbsp;
 	
 	<div id="plotpoint" class="chooser hide">
+		Show top:
+		<input id="topx" name="topx" onchange="topxtoggle();" type="number" value="20" />
+		
+		&nbsp; &nbsp; &nbsp; &nbsp;		
+		
 		Plot on: 
 		<select id="plotpoints" name="plotpoints" onchange="plottoggle();"></select>
 		
 		&nbsp; &nbsp; &nbsp; &nbsp;
 		
-		Show top:
-		<input id="topx" name="topx" onchange="topxtoggle();" type="number" value="20" />
+		<div id="groupbydiv" class="chooser hide">
+			Group by: 
+			<select id="groupby" name="groupby" onchange="groupbytoggle();"></select>
+		</div>
 	</div>
 	
 	
