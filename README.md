@@ -64,7 +64,7 @@ For client or top call statistics, you have to re-enable them in FileMaker Serve
 
 The default view shows you the last 240 snapshots (2 hours with 30 second intervals), but you can move the top scroller to show the last 2,880 snapshots.  If you want to go back even further, you can edit the snapshots variable in serverstats.js.  (Doing so will slow down the calls to FM Server.)
 
-(For the client stats, you will get 10x the number of snapshots.  This is because there are multiple lines per date.)
+(For the client or top call stats, you will get 10x the number of snapshots.  This is because there are multiple lines per date.)
 
 2.  Easily toggle on and off the data points you want to see.
 
