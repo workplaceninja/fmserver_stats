@@ -12,7 +12,7 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.1
+/* FMSERVER_STATS v1.3.2
 ** written by Christopher Bishop @ FuseFX, Inc.
 */
 
@@ -188,6 +188,8 @@ if ( url === '' ) {
 	var default_snapshots = 240;
 	var chartData = [];
 	var csv, chart, graphs, valueaxes, nameobj, sortable;
+	var startindex, endindex, chartlength;
+	
 	getStats(1);
 	var refint = setInterval(function() {refreshChart();}, refinput * 1000);
 }
@@ -327,6 +329,10 @@ function getStats (fullrefresh) {
 			}
 		}
 	};
+	
+	if ( fullrefresh === 0 ) {
+		updateIndexes();
+	}
 	
 	var thisurl = url + '?type=' + chartArr[chartnum] + '&lines=' + snapshots * defaultlinesArr[chartnum] + '&rnd=' + Math.random();
 	
@@ -556,18 +562,24 @@ function abformat (b64) {
 }
 
 
+function updateIndexes () {
+	startindex = chart.startIndex;
+	endindex = chart.endIndex;
+	chartlength = chartData.length;
+}
+
+
 function updateChart () {
-	var st = chart.startIndex;
-	var et = chart.endIndex;
-	var len = chartData.length;
-	
 	chart.dataProvider = chartData;
 	chart.validateData();
+	var newlen = chartData.length;
 	
-	if ( et === len - 1 ) {
+	if ( endindex > chartlength - 4 ) {
 		//reset zoom to new end
-		chart.zoomToIndexes(st, chartData.length - 1);
+		chart.zoomToIndexes((newlen - (endindex - startindex)) - 1, newlen - 1);
 	}
+	
+	updateIndexes();
 }
 
 
@@ -614,10 +626,11 @@ function createChart () {
 	
 	chart.addListener("rendered", zoomChart);
 	zoomChart();
+	
+	updateIndexes();
 }
 
 
 function zoomChart() {
     chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
-
