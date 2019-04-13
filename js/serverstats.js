@@ -12,7 +12,7 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.2
+/* FMSERVER_STATS v1.3.3
 ** written by Christopher Bishop @ FuseFX, Inc.
 */
 
@@ -620,7 +620,8 @@ function createChart () {
 			"minorGridEnabled": true
 		},
 		"export": {
-			"enabled": true
+			"enabled": true,
+			"position": "top-left"
 		}
 	});
 	
