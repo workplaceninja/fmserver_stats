@@ -12,7 +12,8 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.3
+
+/* FMSERVER_STATS v1.3.4
 ** written by Christopher Bishop @ FuseFX, Inc.
 */
 
@@ -179,6 +180,11 @@ if ( chartnum === '' ) {
 } else {
 	chartnum = +chartnum;
 	setTimeout(function() { document.getElementById('chartnum').value = chartnum; showPlotPoints(chartnum) }, 50);
+}
+
+var sn = getParam('snapshots');
+if ( sn !== '' ) {
+	snapshots = +sn;
 }
 
 
@@ -383,7 +389,7 @@ function amReformat (csv) {
 				y += 1;
 			}
 		} else {
-			n = btoa(csvcolumns[groupArr[chartnum]]);
+			n = btoa(unescape(encodeURIComponent(csvcolumns[groupArr[chartnum]])));
 			val = +csvcolumns[chosencolumnArr[chartnum]];
 			nameobj[n] = (nameobj[n] || 0) + val;
 			obj[n] = Math.max(0, val);
@@ -635,3 +641,4 @@ function createChart () {
 function zoomChart() {
     chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
+
