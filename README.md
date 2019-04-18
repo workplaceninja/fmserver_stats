@@ -1,4 +1,4 @@
-# fmserver_stats v1.3.4
+# fmserver_stats v1.3.5
 Web replacement for the missing FileMaker 17+ server statistics
 
 FileMaker Server 17 removed the useful Statistics pane for server stats like Elapsed Time, Cache Hit %, etc.  This brings it back, and in a more improved way.
