@@ -13,7 +13,7 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.4
+/* FMSERVER_STATS v1.3.5
 ** written by Christopher Bishop @ FuseFX, Inc.
 */
 
@@ -359,6 +359,25 @@ function errlog (str) {
 }
 
 
+function getClr (str) {
+	var tot = 0, n = 0, ncount = str.length;
+	while ( n < ncount ) {
+		tot += str.charCodeAt(n) * Math.pow(256, n % 3);
+		n += 1;
+	}
+	return toColor(tot);
+}
+
+
+function toColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16;
+    return "rgba(" + [r, g, b].join(",") + ")";
+}
+
+
 function amReformat (csv) {
 	var cArr = [];
 	var retArr = [];
@@ -526,6 +545,7 @@ function amReformat (csv) {
 		xcount = sortable.length;
 		while ( x < topx && x < xcount ) {
 			property = sortable[x][0];
+			clr = getClr(property);
 			graphs.push(
 				{
 					"id": property,
@@ -535,6 +555,8 @@ function amReformat (csv) {
 					"lineAlpha": 0.4,
 					"fillAlphas": 0.6,
 					"valueAxis": 'g1',
+					"color": clr,
+					"lineColor": clr,
 					"forceGap": true,
 					"gapPeriod": refinput * 1.02
 				}
