@@ -13,10 +13,10 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.5
+/* FMSERVER_STATS v1.3.6
 ** written by Christopher Bishop @ FuseFX, Inc.
 ** created April 12, 2019
-** updated April 17, 2019
+** updated April 19, 2019
 */
 
 
@@ -28,6 +28,7 @@ var groupArr = [0, 8, 11];
 var topx = 20;
 var refinput = 30;
 var logarithmic = false;
+var filter = '';
 
 
 // The names of the columns in the chart
@@ -189,6 +190,12 @@ if ( sn !== '' ) {
 	snapshots = +sn;
 }
 
+var ft = getParam('filter');
+if ( ft !== '' ) {
+	filter = ft;
+	document.getElementById('filter').value = filter;
+}
+
 
 if ( url === '' ) {
 	window.alert('You must set the url in the serverstats.js file.');
@@ -209,6 +216,16 @@ function reftoggle () {
 		refinput = val;
 		clearInterval(refint);
 		refint = setInterval(function() {refreshChart();}, refinput * 1000);
+	}
+}
+
+
+function filtertoggle () {
+	var val = document.getElementById('filter').value;
+	if ( val !== filter ) {
+		filter = val;
+		chartData = amReformat(csv);
+		createChart();
 	}
 }
 
@@ -403,25 +420,42 @@ function amReformat (csv) {
 		
 		obj[valueArr[chartnum][0]] = d;
 		
-		if ( chartnum === 0 ) {
-			y = 1;
+		inc = 0;
+		if ( chartnum === 0 || filter === '' ) {
+			inc = 1;
+		} else {
+			y = 0;
 			while ( y < ycount ) {
-				obj[valueArr[chartnum][y]] = Math.max(0, +csvcolumns[y]);
+				if ( groupByArr[chartnum][y] === true ) {
+					if ( (unescape(encodeURIComponent(csvcolumns[y]))).toLowerCase().indexOf(filter.toLowerCase()) > -1 ) {
+						inc = 1;
+					}
+				}
 				y += 1;
 			}
-		} else {
-			n = btoa(unescape(encodeURIComponent(csvcolumns[groupArr[chartnum]])));
-			val = +csvcolumns[chosencolumnArr[chartnum]];
-			nameobj[n] = (nameobj[n] || 0) + val;
-			obj[n] = Math.max(0, val);
 		}
 		
-		if ( chartnum === 0 || (d.getTime() !== lastd.getTime() && d.getTime() > todaym10 ) ) {
-			cArr.push(obj);
-			obj = {};
-		}
+		if ( inc === 1 ) {
+			if ( chartnum === 0 ) {
+				y = 1;
+				while ( y < ycount ) {
+					obj[valueArr[chartnum][y]] = Math.max(0, +csvcolumns[y]);
+					y += 1;
+				}
+			} else {
+				n = btoa(unescape(encodeURIComponent(csvcolumns[groupArr[chartnum]])));
+				val = +csvcolumns[chosencolumnArr[chartnum]];
+				nameobj[n] = (nameobj[n] || 0) + val;
+				obj[n] = Math.max(0, val);
+			}
+			
+			if ( chartnum === 0 || (d.getTime() !== lastd.getTime() && d.getTime() > todaym10 ) ) {
+				cArr.push(obj);
+				obj = {};
+			}
 		
-		lastd = new Date(d);
+			lastd = new Date(d);
+		}
 		x += 1;
 	}
 	
@@ -518,12 +552,14 @@ function amReformat (csv) {
 	
 
 		sortable = [];
-		for (var nameval in nameobj) {
-		    sortable.push([nameval, nameobj[nameval]]);
+		var nameval;
+		
+		for (nameval in nameobj) {
+			sortable.push([nameval, nameobj[nameval]]);
 		}
 		
 		sortable.sort(function(a, b) {
-		    return b[1] - a[1];
+			return b[1] - a[1];
 		});
 		
 		
@@ -665,4 +701,3 @@ function createChart () {
 function zoomChart() {
     chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
-
