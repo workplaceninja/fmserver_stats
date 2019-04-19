@@ -5,7 +5,6 @@
 	<script src="amcharts/amcharts.js"></script>
 	<script src="amcharts/serial.js"></script>
 	<script src="amcharts/plugins/export/export.min.js"></script>
-	<script src="js/serverstats.js"></script>
 	
 	<link rel="stylesheet" href="amcharts/plugins/export/export.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="css/serverstats.css" type="text/css" media="all" />
@@ -50,6 +49,11 @@
 	&nbsp; &nbsp; &nbsp; &nbsp;
 	
 	<div id="plotpoint" class="chooser hide">
+		Filter:
+		<input id="filter" name="filter" onchange="filtertoggle();" type="text" value="" />
+		
+		&nbsp; &nbsp; &nbsp; &nbsp;		
+		
 		Show top:
 		<input id="topx" name="topx" onchange="topxtoggle();" type="number" value="20" />
 		
@@ -71,6 +75,8 @@
 	
 	
 	<div id="chartdiv"></div>
+	
+	<script src="js/serverstats.js"></script>
 	
 </body>
 
