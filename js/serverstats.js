@@ -13,10 +13,10 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.6
+/* FMSERVER_STATS v1.3.7
 ** written by Christopher Bishop @ FuseFX, Inc.
 ** created April 12, 2019
-** updated April 19, 2019
+** updated April 17, 2019
 */
 
 
@@ -586,7 +586,7 @@ function amReformat (csv) {
 			clr = getClr(property);
 			graphs.push(
 				{
-					"id": property,
+					"id": "c" + x,
 					"balloonText": "[[title]]: [[value]]",
 					"title": abformat(property),
 					"valueField": property,
@@ -674,7 +674,7 @@ function createChart () {
 			"scrollbarHeight": 40
 		},
 		"chartCursor": {
-		   "limitToGraph": "c14",
+ 		   "limitToGraph": (chartnum === 0 ? "c14" : null),
 		   "categoryBalloonDateFormat": "MMM D, YYYY JJ:NN:SS"
 		},
 		"categoryField": valueArr[chartnum][0],
