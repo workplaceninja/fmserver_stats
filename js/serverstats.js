@@ -151,6 +151,144 @@ var disabledArr = [
 					[
 						true, false, false, false, false, false, 
 						false, false, false, false, false, false, 
+						false, false, false, false, false, false/* FMSERVER_STATS v1.3.8
+** written by Christopher Bishop @ FuseFX, Inc.
+** created April 12, 2019
+** updated April 19, 2019
+*/
+
+
+
+var chartArr = ['server', 'client', 'topcall'];
+var chosencolumnArr = [14, 5, 8];
+var defaultlinesArr = [1, 10, 10];
+var groupArr = [0, 8, 11];
+var topx = 20;
+var refinput = 30;
+var logarithmic = false;
+var filter = '';
+
+
+// The names of the columns in the chart
+var headerArr = [
+					[	
+						'Timestamp', 'Network KB/sec In', 'Network KB/sec Out', 'Disk KB/sec Read', 'Disk KB/sec Written', 'Cache Hit %', 
+						'Cache Unsaved %', 'Pro Clients', 'Open Databases', 'ODBC/JDBC Clients', 'WebDirect Clients', 'Custom Web Clients', 
+						'Remote Calls/sec', 'Remote Calls In Progress', 'Elapsed Time/call', 'Wait Time/call', 'I/O Time/call', 'Go Clients'
+					],
+					[	
+						'Timestamp', 'Network Bytes In', 'Network Bytes Out', 
+						'Remote Calls', 'Remote Calls In Progress', 'Elapsed Time', 
+						'Wait Time', 'I/O Time', 'Client name'
+					],
+					[
+						'Timestamp', 'Start Time', 'End Time', 'Total Elapsed',
+						'Operation', 'Target', 'Network Bytes In', 'Network Bytes Out',
+						'Elapsed Time', 'Wait Time', 'I/O Time', 'Client name'
+					]
+				];
+
+// Not important - just internal variable names
+var valueArr = [
+					[		
+						'date', 'netin', 'netout', 'diskread', 'diskwrite', 'cachehit', 
+						'cacheunsaved', 'proclients', 'opendbs', 'xdbcclients', 'webdclients', 'cwpclients', 
+						'callspersec', 'callsinprog', 'elapsed', 'wait', 'io', 'goclients'
+					],
+					[		
+						'date', 'netin', 'netout',
+						'calls', 'callsinprog', 'elapsed', 
+						'wait', 'io', 'name'
+					],
+					[		
+						'date', 'start', 'end', 'totalelapsed',
+						'operation', 'target', 'netin', 'netout',
+						'elapsed', 'wait', 'io', 'name'
+					]
+				];
+
+// Define the color of the lines on the chart
+var colorArr = [
+					[
+						'#901b52', '#1c72f5', '#eb47f9', '#1f189f', '#0977bf', '#8e713c', 
+						'#0f2b1f', '#8abdcc', '#a301d5', '#a099da', '#4b8051', '#a8a4a5', 
+						'#f83169', '#4b996f', '#34df9d', '#6b039a', '#da7e52', '#ee9915'
+					],
+					[
+						'#901b52', '#1c72f5', '#eb47f9', 
+						'#0f2b1f', '#8abdcc', '#a301d5', 
+						'#f83169', '#4b996f', '#34df9d'
+					],
+					[
+						'#901b52', '#1c72f5', '#eb47f9', '#1f189f',
+						'#0f2b1f', '#8abdcc', '#a301d5', '#a099da',
+						'#f83169', '#4b996f', '#34df9d', '#6b039a',
+					]
+					
+				];
+				
+var groupByArr = [
+					[
+						false, false, false, false, false, false,
+						false, false, false, false, false, false,
+						false, false, false, false, false, false
+					],
+					[
+						false, false, false,
+						false, false, false,
+						false, false, true
+					],
+					[
+						false, false, false, false,
+						true, true, false, false,
+						false, false, false, true
+					]
+				];
+
+// This defines which Y axis to use.  (Charts that display in microseconds will not work well with others.)
+var pointArr = [
+					[
+						0, 1, 1, 1, 1, 2, 
+						2, 3, 3, 3, 3, 3, 
+						4, 4, 5, 5, 5, 3
+					],
+					[
+						0, 1, 1,
+						4, 4, 5,
+						5, 5, 0
+					],
+					[
+						0, 0, 0, 5,
+						0, 0, 1, 1,
+						5, 5, 5, 0
+					]
+
+				];
+
+// Set which stats are hidden by default
+var hiddenArr = [
+					[
+						true, true, true, true, true, true, 
+						true, true, true, true, true, true, 
+						false, false, false, false, true, true
+					],
+					[
+						true, false, false,
+						false, false, false,
+						false, false, true
+					],
+					[
+						true, true, true, false,
+						true, true, false, false,
+						false, false, false, true
+					]
+				];
+
+// Set which stats are disabled (due to unplottable data)
+var disabledArr = [
+					[
+						true, false, false, false, false, false, 
+						false, false, false, false, false, false, 
 						false, false, false, false, false, false
 					],
 					[
@@ -670,12 +808,12 @@ function createChart () {
 		"graphs": graphs,
 		"chartScrollbar": {
 			"autoGridCount": true,
-			"graph": "c14",
-			"scrollbarHeight": 40
+			"scrollbarHeight": 40,
+			"graph": (chartnum === 0 ? "c14" : "c1")
 		},
 		"chartCursor": {
- 		   "limitToGraph": (chartnum === 0 ? "c14" : null),
-		   "categoryBalloonDateFormat": "MMM D, YYYY JJ:NN:SS"
+		   "categoryBalloonDateFormat": "MMM D, YYYY JJ:NN:SS",
+		   "limitToGraph": (chartnum === 0 ? "c14" : "c1")
 		},
 		"categoryField": valueArr[chartnum][0],
 		"categoryAxis": {
@@ -701,3 +839,4 @@ function createChart () {
 function zoomChart() {
     chart.zoomToIndexes(chartData.length - default_snapshots, chartData.length - 1);
 }
+
