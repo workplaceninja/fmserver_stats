@@ -1,4 +1,4 @@
-# fmserver_stats v1.3.5
+# fmserver_stats v1.3.6
 Web replacement for the missing FileMaker 17+ server statistics
 
 FileMaker Server 17 removed the useful Statistics pane for server stats like Elapsed Time, Cache Hit %, etc.  This brings it back, and in a more improved way.
@@ -75,6 +75,8 @@ The default view shows you the last 240 snapshots (2 hours with 30 second interv
 5.  Plot top call statistics on a graph.  (Choose from several plot points and groupings.)
 
 6.  Enable Log Scale, making the Y axis logarithmic (10, 100, 1000, 10000, etc)
+
+7.  Filter down to any text
 
 If you want to see snapshots more frequently than every seconds, you must change these settings in FileMaker Server to collect more snapshots.
 
