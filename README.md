@@ -8,11 +8,11 @@ It also allows you to graph client and top call statistics on a timeline.  You c
 It works with Server 16 - 18, and might work with earlier versions (untested).
 
 
-![FileMaker Server Stats Image](/css/screenshot_server_2.png?raw=true "")
+![FileMaker Server Stats Image](/css/screenshot_server_3.png?raw=true "")
 
-![FileMaker Client Stats Image](/css/screenshot_client_2.png?raw=true "")
+![FileMaker Client Stats Image](/css/screenshot_client_3.png?raw=true "")
 
-![FileMaker Top Call Stats Image](/css/screenshot_topcalls_2.png?raw=true "")
+![FileMaker Top Call Stats Image](/css/screenshot_topcalls_3.png?raw=true "")
 
 
 # Installation
