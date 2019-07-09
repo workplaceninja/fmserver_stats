@@ -13,10 +13,10 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.9
+/* FMSERVER_STATS v1.3.10
 ** written by Christopher Bishop @ FuseFX, Inc.
 ** created April 12, 2019
-** updated April 19, 2019
+** updated July 9, 2019
 */
 
 
@@ -338,7 +338,7 @@ function getStats (fullrefresh) {
 					if ( csv === 'Error - bad path' ) {
 						errlog('Error loading data from FM Server - You must enable ' + chartArr[chartnum] + ' stats on FileMaker Server.');
 					} else {
-						errlog('Error loading data from FM Server - You must copy php/serverstats/stats.php over to the FileMaker Server at "FileMaker Server/HTTPServer/conf/"');
+						errlog('Error loading data from FM Server - You must copy php/serverstats/stats.php over to the FileMaker Server at "FileMaker Server/HTTPServer/conf/serverstats/"');
 					}
 				} else {
 					chartData = amReformat(csv);
@@ -350,7 +350,7 @@ function getStats (fullrefresh) {
 					}
 				}
 			} else {
-				errlog('Error loading data from FM Server - ' + xmlhttp.status + '.  You must copy php/serverstats/stats.php over to the FileMaker Server at "FileMaker Server/HTTPServer/conf/"');
+				errlog('Error loading data from FM Server - ' + xmlhttp.status + '.  You must copy php/serverstats/stats.php over to the FileMaker Server at "FileMaker Server/HTTPServer/conf/serverstats/"');
 			}
 		}
 	};
