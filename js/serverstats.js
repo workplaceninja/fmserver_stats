@@ -16,7 +16,7 @@ var url = '';
 /* FMSERVER_STATS v1.3.11
 ** written by Christopher Bishop @ FuseFX, Inc.
 ** created April 12, 2019
-** updated July 9, 2019
+** updated July 29, 2019
 */
 
 
