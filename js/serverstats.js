@@ -13,7 +13,7 @@ var url = '';
 
 
 
-/* FMSERVER_STATS v1.3.10
+/* FMSERVER_STATS v1.3.11
 ** written by Christopher Bishop @ FuseFX, Inc.
 ** created April 12, 2019
 ** updated July 9, 2019
@@ -411,12 +411,13 @@ function amReformat (csv) {
 	
 	var n, val, y, ycount = headerArr[chartnum].length;
 	var x = 1, xcount = csvlines.length;
-	var d, lastd = new Date(csvlines[0].split("\t")[0]);
+	var d, ld = csvlines[0].split("\t")[0].replace('-', '/').replace('-', '/'), lastd = new Date(ld.substr(0, 19) + ld.substr(24));
 	var valmin = (logarithmic === true ? 1 : 0);
 	
 	while (x < xcount) {
 		csvcolumns = csvlines[x].split("\t");
-		d = new Date(csvcolumns[0]);
+		ld = csvcolumns[0].replace('-', '/').replace('-', '/');
+		d = new Date(ld.substr(0, 19) + ld.substr(24));
 		
 		obj[valueArr[chartnum][0]] = d;
 		
